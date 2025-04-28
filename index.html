@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <link href="https://unpkg.com/maplibre-gl@3.x/dist/maplibre-gl.css" rel="stylesheet" />
+    <style>
+      body { margin: 0; }
+      #map { height: 100vh; }
+    </style>
+  </head>
+  <body>
+    <div id="map" />
+    <script src="https://unpkg.com/maplibre-gl@3.x/dist/maplibre-gl.js"></script>
+    <script>
+      const apiKey = "v1.public.eyJqdGkiOiJmMDc2NGQxZi1lNDk1LTQyMWYtYjM5Yy0wMThkZTQ5YTU1ZjkifQwaO_iiUbTDUlzUUX24k09iVquM0ODnuqSnSfe-zWldwZLV_0UMVrLxVZF05_4V5TQAxJNZ40DPzOT20-LiacwUtItaaGFVt9-ieUjrkir2cgJgxPGVNYzZrr5DQCC9LrAa-o5McOGVaYzz5wkvBxubD17yFKNkGjFwCaWNCExtcKlUjnL2sTqR50W6HpCwv4jk0RsstvaUZFIfg9BF-Ai75N4ABlyNb1MDeoUSy2gI6bosD0XLbQXIfb50yOcnhx8oQ6mFRHLB89trhgW6iNq0Axq8ig-_pAu3Oj7TkV8jTnr0fFHELcB74HHPcw6PG3r4IJ-Z4x-qMLa0K64jGlU.YTAwN2QzYTQtMjA4OC00M2Q5LWE5ZTUtYjk4Y2U1YWUxY2Uy";
+      const mapName = "building-map";
+      const region = "ap-northeast-1";
+
+      const map = new maplibregl.Map({
+        container: "map",
+        style: `https://maps.geo.${region}.amazonaws.com/maps/v0/maps/${mapName}/style-descriptor?key=${apiKey}`,
+        center: [139.7670, 35.68148],
+        zoom: 16,
+      });
+      map.addControl(new maplibregl.NavigationControl(), "top-left");
+      const buildings = [
+        {
+          name: "丸ビル",
+          coordinates: [139.7636203, 35.6811927], // 経度、緯度
+          url: "https://www.marunouchi.com/"
+        },
+        {
+          name: "新丸ビル",
+          coordinates: [139.7642933, 35.6826656],
+          url: "https://www.marunouchi.com/building/shinmaru/"
+        }
+      ];
+      map.on('load', () => {
+        buildings.forEach(building => {
+          const marker = new maplibregl.Marker()
+            .setLngLat(building.coordinates)
+            .addTo(map);
+
+          marker.getElement().addEventListener('click', () => {
+            window.open(building.url, '_blank');
+          });
+        });
+      });
+
+    </script>
+  </body>
+</html>
